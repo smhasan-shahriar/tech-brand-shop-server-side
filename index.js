@@ -28,7 +28,33 @@ async function run() {
   try {
     await client.connect();
     const database = client.db("productsDB");
-    const productsCollection = database.collection("products")
+    const productsCollection = database.collection("products");
+    const cartCollection = database.collection('cart');
+    app.get('/mycart', async(req, res)=>{
+        const cursor = cartCollection.find();
+        const cartProducts = await cursor.toArray();
+        res.send(cartProducts)
+    })
+    app.post('/mycart', async(req, res)=> {
+        const cartProduct = req.body; 
+        const result = await cartCollection.insertOne(cartProduct);
+        res.send(result);
+ 
+    })
+    app.delete('/mycart/:id', async(req, res) => {
+        const id = req.params.id;
+        const email = req.body.email;
+        const query = {productId: id, email};
+        console.log(query)
+        const result = await cartCollection.deleteOne(query);
+        res.send(result)
+
+    })
+    app.get('/products', async(req, res)=> {
+        const cursor = productsCollection.find();
+        const products = await cursor.toArray();
+        res.send(products)
+    })
     app.get('/brands/:name', async (req, res) => {
         const brandName = req.params.name;
         const query = {brand: { $regex: new RegExp(brandName, 'i') }};
