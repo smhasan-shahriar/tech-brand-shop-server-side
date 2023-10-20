@@ -111,7 +111,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res)=> {
-    res.send('server connected')
+    res.send('server connected successfully')
 })
 
 app.listen(port, ()=>{
