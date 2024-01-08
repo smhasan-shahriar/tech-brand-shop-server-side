@@ -68,6 +68,12 @@ async function run() {
         const product = await productsCollection.findOne(query);
         res.send(product)
     })
+    app.delete('/deleteproduct/:id', async(req, res)=> {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await productsCollection.deleteOne(query);
+        res.send(result)
+    })
     app.get('/updateproducts/:id', async(req,res)=> {
         const id = req.params.id;
         const query = {_id: new ObjectId(id)};
